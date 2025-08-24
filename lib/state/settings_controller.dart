@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/hive/hive_init.dart';
 import 'package:hive/hive.dart';
 
+
+final themeModeProvider = StateNotifierProvider<ThemeModeController, ThemeMode> (
+  (ref) => ThemeModeController()
+);
+
 class ThemeModeController extends StateNotifier<ThemeMode> {
   ThemeModeController() : super(ThemeMode.system) {
     _load();
