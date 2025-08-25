@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notes_flutter/screens/add_note_screen.dart';
 import '../../../state/notes_controller.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -40,7 +41,12 @@ class HomeScreen extends ConsumerWidget {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddNoteScreen()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
