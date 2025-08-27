@@ -3,13 +3,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_flutter/screens/add_note_screen.dart';
 import 'package:notes_flutter/screens/trash_box_screen.dart';
 import '../../../state/notes_controller.dart';
+import '../../../data/models/note.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
+
+// List<Note> trashedNotes = [];
+
+//     if (notes is AsyncData<List<Note>>) {
+//       trashedNotes = notes.value.where((n) => n.isTrashed).toList();
+//     }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notes = ref.watch(notesProvider);
+
+    List<Note> activeNotes =[];
+
+    if (notes is AsyncData<List<Note>>){
+      activeNotes = notes.value.where((n) => !n.isArchived && !n.isTrashed).toList(); 
+    } 
     return Scaffold(
       appBar: AppBar(title: const Text('Notes'), centerTitle: true),
       drawer: Drawer(
@@ -49,9 +62,9 @@ class HomeScreen extends ConsumerWidget {
         data: (list) => list.isEmpty
             ? const Center(child: Text('Note Box is Empty'))
             : ListView.builder(
-                itemCount: list.length,
+                itemCount: activeNotes.length,
                 itemBuilder: (_, index) {
-                  final note = list[index];
+                  final note = activeNotes[index];
                   return ListTile(
                     trailing: IconButton(
                       onPressed: () {
