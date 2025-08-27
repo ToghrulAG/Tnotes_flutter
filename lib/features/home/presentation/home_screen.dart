@@ -8,21 +8,17 @@ import '../../../data/models/note.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-
-// List<Note> trashedNotes = [];
-
-//     if (notes is AsyncData<List<Note>>) {
-//       trashedNotes = notes.value.where((n) => n.isTrashed).toList();
-//     }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notes = ref.watch(notesProvider);
 
-    List<Note> activeNotes =[];
+    List<Note> activeNotes = [];
 
-    if (notes is AsyncData<List<Note>>){
-      activeNotes = notes.value.where((n) => !n.isArchived && !n.isTrashed).toList(); 
-    } 
+    if (notes is AsyncData<List<Note>>) {
+      activeNotes = notes.value
+          .where((n) => !n.isArchived && !n.isTrashed)
+          .toList();
+    }
     return Scaffold(
       appBar: AppBar(title: const Text('Notes'), centerTitle: true),
       drawer: Drawer(
@@ -65,24 +61,43 @@ class HomeScreen extends ConsumerWidget {
                 itemCount: activeNotes.length,
                 itemBuilder: (_, index) {
                   final note = activeNotes[index];
-                  return ListTile(
-                    trailing: IconButton(
-                      onPressed: () {
-                        ref.read(notesProvider.notifier).toTrash(note);
-                  
-                      },
-                      icon: Icon(
-                        Icons.delete_outline,
-                        color: const Color.fromARGB(255, 136, 60, 55),
+                  return Dismissible(
+                    direction: DismissDirection.horizontal,
+                    key: ValueKey(note.id),
+                    background: Container(
+                      color: Colors.blueGrey,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      child: Icon(Icons.archive),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(Icons.delete, color: Colors.white),
+                          Text(
+                            'Delete',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
-                    title: Text(note.title),
-                    subtitle: Text(
-                      note.content,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    onDismissed: (direction) => {
+                      if (direction == DismissDirection.endToStart)
+                        {ref.read(notesProvider.notifier).toTrash(note)}
+                      else
+                        {
+                          // ARCHIVE
+                        },
+                    },
+                    child: ListTile(
+                      title: Text(note.title),
+                      subtitle: Text(note.content),
                     ),
-                    onTap: () {},
                   );
                 },
               ),
