@@ -36,6 +36,7 @@ class NotesController extends StateNotifier<AsyncValue<List<Note>>> {
 
   final repo = ref.read(notesRepoProvider);
   await repo.updateNote(trashedNote);
+  
   await refresh();
 
 }
