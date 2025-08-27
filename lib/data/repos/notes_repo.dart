@@ -5,10 +5,10 @@ import '../models/note.dart';
 abstract class NotesRepo {
   Future<List<Note>> getAll();
 
-  Future<Note> create(Note note);
-  Future<void> update(Note note);
-  Future<void> delete(int id);
-  Future<void> putMany(List<Note> notes);
+  Future<Note> createNote(Note note);
+  Future<void> updateNote(Note note);
+  Future<void> deleteNote(int id);
+  Future<void> putManyNotes(List<Note> notes);
 }
 
 class HiveNotesRepo implements NotesRepo {
@@ -18,19 +18,20 @@ class HiveNotesRepo implements NotesRepo {
   Future<List<Note>> getAll() async => _box.values.toList();
 
   @override
-  Future<Note> create(Note note) async {
+  Future<Note> createNote(Note note) async {
     await _box.put(note.id, note);
+    // await Hive.box<Note>('notes_box').clear();
     return note;
   }
 
   @override
-  Future<void> update(Note note) => _box.put(note.id, note);
+  Future<void> updateNote(Note note) => _box.put(note.id, note);
 
   @override
-  Future<void> delete(int id) => _box.delete(id);
+  Future<void> deleteNote(int id) => _box.delete(id);
 
   @override
-  Future<void> putMany(List<Note> notes) async {
+  Future<void> putManyNotes(List<Note> notes) async {
     await _box.putAll({for (final n in notes) n.id: n});
   }
 }
