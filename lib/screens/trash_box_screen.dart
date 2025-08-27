@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_flutter/data/models/note.dart';
 import '../../../state/notes_controller.dart';
-import 'package:hive/hive.dart';
 
 class TrashBoxScreen extends ConsumerStatefulWidget {
   const TrashBoxScreen({super.key});
@@ -26,7 +25,20 @@ class _TrashBoxScreenState extends ConsumerState<TrashBoxScreen> {
       appBar: AppBar(title: const Text('Trash Box'), centerTitle: true),
       body: trashedNotes.isEmpty
           ? Center(child: Text('Trash Box is empty'))
-          : Text('Trash Box is not empty'),
+          : ListView.builder(
+              itemCount: trashedNotes.length,
+              itemBuilder: (context, index) {
+                final note = trashedNotes[index];
+                return ListTile(
+                  title: Text(note.title),
+                  subtitle: Text(note.content),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [Icon(Icons.delete_forever), Icon(Icons.restore)],
+                  ),
+                );
+              },
+            ),
     );
   }
 }
