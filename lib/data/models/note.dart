@@ -31,7 +31,7 @@ class Note extends HiveObject {
     this.isTrashed = false,
   });
 
-  Note CopyWith({
+  Note copyWith({
     String? content,
     int? groupId,
     bool? isArchived,
@@ -45,6 +45,6 @@ class Note extends HiveObject {
     updatedAt: updatedAt ?? DateTime.now(),
     groupId: groupId ?? this.groupId,
     isArchived: isArchived ?? this.isArchived,
-    isTrashed: isArchived ?? this.isTrashed,
+    isTrashed: isTrashed ?? this.isTrashed,
   );
 }
