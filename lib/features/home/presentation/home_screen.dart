@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_flutter/screens/add_note_screen.dart';
+import 'package:notes_flutter/screens/trash_box_screen.dart';
 import '../../../state/notes_controller.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -14,8 +15,31 @@ class HomeScreen extends ConsumerWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            DrawerHeader(child: const Text('Menu')),
-            ListTile(onTap: () {}, title: const Text('Settings')),
+            DrawerHeader(
+              child: const Center(
+                child: Text('Menu', style: TextStyle(fontSize: 24)),
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TrashBoxScreen()),
+                );
+              },
+              title: const Text('Trash'),
+              leading: Icon(Icons.delete),
+            ),
+            ListTile(
+              onTap: () {},
+              title: const Text('Archive'),
+              leading: Icon(Icons.archive),
+            ),
+            ListTile(
+              onTap: () {},
+              title: const Text('Settings'),
+              leading: Icon(Icons.settings),
+            ),
           ],
         ),
       ),
@@ -27,11 +51,21 @@ class HomeScreen extends ConsumerWidget {
             : ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (_, index) {
-                  final n = list[index];
+                  final note = list[index];
                   return ListTile(
-                    title: Text(n.title),
+                    trailing: IconButton(
+                      onPressed: () {
+                        ref.read(notesProvider.notifier).toTrash(note);
+                  
+                      },
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: const Color.fromARGB(255, 136, 60, 55),
+                      ),
+                    ),
+                    title: Text(note.title),
                     subtitle: Text(
-                      n.content,
+                      note.content,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
