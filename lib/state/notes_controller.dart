@@ -9,7 +9,6 @@ final notesProvider =
       (ref) => NotesController(ref)..refresh(),
     );
 
-
 class NotesController extends StateNotifier<AsyncValue<List<Note>>> {
   NotesController(this.ref) : super(AsyncValue.loading());
   final Ref ref;
@@ -19,9 +18,25 @@ class NotesController extends StateNotifier<AsyncValue<List<Note>>> {
     final notes = await repo.getAll();
     state = AsyncValue.data(notes);
   }
-  Future <void> create(Note note) async {
+
+  Future<void> create(Note note) async {
     final repo = ref.read(notesRepoProvider);
-    await repo.create(note);
+    await repo.createNote(note);
     await refresh();
   }
+
+  Future<void> delete(int id) async {
+    final repo = ref.read(notesRepoProvider);
+    await repo.deleteNote(id);
+    await refresh();
+  }
+
+  Future<void> toTrash(Note note) async {
+  final trashedNote = note.copyWith(isTrashed: true);
+
+  final repo = ref.read(notesRepoProvider);
+  await repo.updateNote(trashedNote);
+  await refresh();
+
+}
 }
