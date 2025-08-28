@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_flutter/screens/add_note_screen.dart';
+import 'package:notes_flutter/screens/archive_note_screen.dart';
 import 'package:notes_flutter/screens/trash_box_screen.dart';
 import '../../../state/notes_controller.dart';
 import '../../../data/models/note.dart';
@@ -40,7 +41,12 @@ class HomeScreen extends ConsumerWidget {
               leading: Icon(Icons.delete),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ArchiveNoteScreen()),
+                );
+              },
               title: const Text('Archive'),
               leading: Icon(Icons.archive),
             ),
@@ -67,11 +73,21 @@ class HomeScreen extends ConsumerWidget {
                     background: Container(
                       color: Colors.blueGrey,
                       alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 20),
-                      child: Icon(Icons.archive),
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Archive',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                          const Icon(Icons.delete, color: Colors.white),
+                        ],
+                      ),
                     ),
                     secondaryBackground: Container(
-                      color: Colors.red,
+                      color: const Color.fromARGB(255, 147, 41, 41),
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(right: 20, left: 20),
                       child: Row(
@@ -80,12 +96,13 @@ class HomeScreen extends ConsumerWidget {
                         children: [
                           const Icon(Icons.delete, color: Colors.white),
                           Text(
-                            'Delete',
+                            'Trash',
                             style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ],
                       ),
                     ),
+
                     onDismissed: (direction) => {
                       if (direction == DismissDirection.endToStart)
                         {ref.read(notesProvider.notifier).toTrash(note)}
