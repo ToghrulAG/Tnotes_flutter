@@ -19,7 +19,15 @@ class ArchiveNoteScreen extends ConsumerWidget {
       appBar: AppBar(title: Text('Archive'), centerTitle: true),
       body: archivedNotes.isEmpty
           ? Center(child: Text('Empty'))
-          : Center(child: Text('data')),
+          : ListView.builder(
+            itemCount: archivedNotes.length,
+            itemBuilder: (context, index) {
+              final note = archivedNotes[index];
+              return ListTile(
+                title: Text(note.title),
+                subtitle: Text(note.content),
+              );
+            }),
     );
   }
 }
