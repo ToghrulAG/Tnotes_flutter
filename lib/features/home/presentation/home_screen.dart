@@ -108,7 +108,7 @@ class HomeScreen extends ConsumerWidget {
                         {ref.read(notesProvider.notifier).toTrash(note)}
                       else
                         {
-                          // ARCHIVE
+                          {ref.read(notesProvider.notifier).toArchive(note)}
                         },
                     },
                     child: ListTile(
