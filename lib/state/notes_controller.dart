@@ -32,12 +32,19 @@ class NotesController extends StateNotifier<AsyncValue<List<Note>>> {
   }
 
   Future<void> toTrash(Note note) async {
-  final trashedNote = note.copyWith(isTrashed: true);
+    final trashedNote = note.copyWith(isTrashed: true);
 
-  final repo = ref.read(notesRepoProvider);
-  await repo.updateNote(trashedNote);
-  
-  await refresh();
+    final repo = ref.read(notesRepoProvider);
+    await repo.updateNote(trashedNote);
 
-}
+    await refresh();
+  }
+  Future <void> toArchive(Note note) async {
+    final archivedNote = note.copyWith(isArchived: true);
+
+    final repo = ref.read(notesRepoProvider);
+    
+    await repo.updateNote(archivedNote);
+    await refresh();
+  }
 }
